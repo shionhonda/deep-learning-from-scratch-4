@@ -1,7 +1,9 @@
+from typing import Iterator
+
 import numpy as np
+
 import common.gridworld_render as render_helper
 from common.types import State
-from typing import Iterator
 
 
 class GridWorld:

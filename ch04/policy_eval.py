@@ -1,10 +1,12 @@
 if "__file__" in globals():
-    import os, sys
+    import os
+    import sys
 
     sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 from collections import defaultdict
+
 from common.gridworld import GridWorld
-from common.types import State, Policy, Value
+from common.types import Policy, State, Value
 
 
 def eval_onestep(pi: Policy, V: Value, env: GridWorld, gamma=0.9):
@@ -19,6 +21,7 @@ def eval_onestep(pi: Policy, V: Value, env: GridWorld, gamma=0.9):
         for action, action_prob in action_probs.items():
             next_state = env.next_state(state, action)
             r = env.reward(state, action, next_state)
+            # NOTE: Added to avoid None exception
             if r is not None:
                 new_V += action_prob * (r + gamma * V[next_state])
         V[state] = new_V
