@@ -22,8 +22,9 @@ def eval_onestep(pi: Policy, V: Value, env: GridWorld, gamma=0.9):
             next_state = env.next_state(state, action)
             r = env.reward(state, action, next_state)
             # NOTE: Added to avoid None exception
-            if r is not None:
-                new_V += action_prob * (r + gamma * V[next_state])
+            if r is None:
+                continue
+            new_V += action_prob * (r + gamma * V[next_state])
         V[state] = new_V
     return V
 

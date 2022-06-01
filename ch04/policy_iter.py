@@ -19,9 +19,10 @@ def greedy_policy(V: Value, env: GridWorld, gamma: float) -> Policy:
             next_state = env.next_state(state, action)
             r = env.reward(state, action, next_state)
             # NOTE: Added to avoid None exception
-            if r is not None:
-                value = r + gamma * V[next_state]
-                action_values[action] = value
+            if r is None:
+                continue
+            value = r + gamma * V[next_state]
+            action_values[action] = value
         # deterministic policy
         max_action = argmax(action_values)
         action_probs = {k: 0 for k in env.actions()}
