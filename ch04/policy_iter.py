@@ -1,3 +1,9 @@
+if "__file__" in globals():
+    import os
+    import sys
+
+    sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
+
 from collections import defaultdict
 from typing import Hashable
 
@@ -23,7 +29,7 @@ def greedy_policy(V: Value, env: GridWorld, gamma: float) -> Policy:
                 continue
             value = r + gamma * V[next_state]
             action_values[action] = value
-        # deterministic policy
+
         max_action = argmax(action_values)
         action_probs = {k: 0 for k in env.actions()}
         action_probs[max_action] = 1
