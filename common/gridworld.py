@@ -1,4 +1,4 @@
-from typing import Iterator
+from typing import Iterator, Optional
 
 import numpy as np
 
@@ -55,7 +55,7 @@ class GridWorld:
 
         return next_state
 
-    def reward(self, state: State, action: int, next_state: State) -> int:
+    def reward(self, state: State, action: int, next_state: State) -> Optional[int]:
         return self.reward_map[next_state]
 
     def render_v(self, v=None, policy=None, print_value=True):
