@@ -1,9 +1,9 @@
 if __name__ == "__main__":
-    import numpy as np
     import matplotlib.pyplot as plt
+    import numpy as np
     import seaborn as sns
+    from bandit import Agent, Bandit
     from tqdm import tqdm
-    from bandit import Bandit, Agent
 
     sns.set()
 
