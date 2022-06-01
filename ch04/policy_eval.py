@@ -50,7 +50,7 @@ if __name__ == "__main__":
     env = GridWorld()
     gamma = 0.9
 
-    pi = defaultdict(lambda: {0: 0.25, 1: 0.25, 2: 0.25, 3: 0.25})
-    V = defaultdict(lambda: 0)
+    pi: Policy = defaultdict(lambda: {0: 0.25, 1: 0.25, 2: 0.25, 3: 0.25})
+    V: Value = defaultdict(lambda: 0)
     V = policy_eval(pi, V, env, gamma)
     env.render_v(V, pi)
