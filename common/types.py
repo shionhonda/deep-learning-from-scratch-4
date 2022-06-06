@@ -1,3 +1,5 @@
 State = tuple[int, int]
 Value = dict[State, float]
-Policy = dict[State, dict[int, float]]
+Action = int
+Policy = dict[State, dict[Action, float]]
+Reward = float
