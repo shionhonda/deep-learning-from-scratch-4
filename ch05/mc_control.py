@@ -5,19 +5,33 @@ if "__file__" in globals():
     sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 import numpy as np
 from collections import defaultdict
-from common.types import Policy, State, Value, Action, Reward
+from common.types import Policy, State, Action, Reward, Q
 from common.gridworld import GridWorld
 
 
-class RandomAgent:
-    def __init__(self) -> None:
+def greedy_probs(
+    Q: Q, state: State, epsilon: float = 0, action_size: int = 4
+) -> Policy:
+    qs = [Q[(state, action)] for action in range(action_size)]
+    max_action = np.argmax(qs)
+    base_prob = epsilon / action_size
+    action_probs = {
+        action: base_prob for action in range(action_size)
+    }  # {0: ε/4, 1: ε/4, 2: ε/4, 3: ε/4}
+    action_probs[max_action] += 1 - epsilon
+    return action_probs
+
+
+class MCAgent:
+    def __init__(self, epsilon: float = 0.1) -> None:
         self.gamma = 0.9
+        self.epsilon = epsilon
+        self.alpha = 0.1
         self.action_size = 4
 
         random_actions = {i: 1 / self.action_size for i in range(self.action_size)}
         self.pi: Policy = defaultdict(lambda: random_actions)
-        self.V: Value = defaultdict(lambda: 0)
-        self.cnts: dict[State, int] = defaultdict(lambda: 0)
+        self.Q: Q = defaultdict(lambda: 0)
         self.memory: list[tuple[State, Action, Reward]] = []
 
     def get_action(self, state: State) -> Action:
@@ -33,20 +47,21 @@ class RandomAgent:
     def reset(self) -> None:
         self.memory.clear()
 
-    def eval(self) -> None:
+    def update(self) -> None:
         G = 0
         for data in reversed(self.memory):
-            state, _, reward = data
+            state, action, reward = data
             G = self.gamma * G + reward
-            self.cnts[state] += 1
-            self.V[state] += (G - self.V[state]) / self.cnts[state]
+            key = (state, action)
+            self.Q[key] += (G - self.Q[key]) * self.alpha
+            self.pi[state] = greedy_probs(self.Q, state, self.epsilon, self.action_size)
 
 
 if __name__ == "__main__":
     env = GridWorld()
-    agent = RandomAgent()
+    agent = MCAgent(epsilon=0.1)
 
-    episodes = 1000
+    episodes = 10000
     for episode in range(episodes):
         state = env.reset()
         agent.reset()
@@ -59,8 +74,8 @@ if __name__ == "__main__":
                 continue
             agent.add(state, action, reward)
             if done:
-                agent.eval()
+                agent.update()
                 break
             state = next_state
 
-    env.render_v(agent.V, agent.pi)
+    env.render_q(agent.Q)
