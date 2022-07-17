@@ -1,3 +1,4 @@
+from os import truncate
 import gym
 import numpy as np
 
@@ -8,5 +9,6 @@ if __name__ == "__main__":
 
     while not done:
         action = np.random.choice([0, 1])
-        next_state, reward, done, info, _ = env.step(action)
+        next_state, reward, terminated, truncated, info = env.step(action)
+        done = terminated or truncated
     env.close()
