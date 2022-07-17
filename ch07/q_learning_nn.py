@@ -50,7 +50,8 @@ class QLearningAgent:
         if np.random.rand() < self.epsilon:
             return np.random.choice(self.action_size)
         else:
-            qs = self.qnet.forward(state)
+            with torch.no_grad():
+                qs = self.qnet.forward(state)
             return qs.argmax().item()
 
     def update(
