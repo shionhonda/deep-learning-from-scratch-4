@@ -5,3 +5,5 @@ My Implementation of "[Deep Learning from Scratch 4: Reinforcement Learning](htt
 - Type Annotations
 - PyTorch 1.12 (Not DeZero)
 - Gym CartPole v1
+
+\* Official implementation is [here](https://github.com/oreilly-japan/deep-learning-from-scratch-4).
