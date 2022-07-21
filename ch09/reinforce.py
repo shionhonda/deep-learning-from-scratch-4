@@ -22,7 +22,7 @@ class Policy(nn.Module):
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         x = F.relu(self.l1(x))
-        x = F.softmax(self.l2(x))
+        x = F.softmax(self.l2(x), dim=1)
         return x
 
 
